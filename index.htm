@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Камінь Ножиці Папір - Битва</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #a855f7;
+            --dark: #0f172a;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(circle at center, #1e293b, #0f172a);
+            color: white;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Екран вибору */
+        #selection-screen {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .stats-top {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        @media (min-width: 768px) {
+            .character-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        .char-card {
+            background: var(--glass);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .char-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.2);
+            border-color: var(--primary);
+        }
+
+        .char-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 3px solid var(--primary);
+        }
+
+        /* Ігровий екран */
+        #game-screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .opponent-full-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+        }
+
+        .choice-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 8rem;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: var(--glass);
+            padding: 40px;
+            border-radius: 50%;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        .choice-overlay.show { transform: translate(-50%, -50%) scale(1); }
+
+        .controls {
+            position: absolute;
+            bottom: 40px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            background: white;
+            color: var(--dark);
+            font-weight: bold;
+            transition: 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        button:hover { transform: scale(1.05); background: var(--primary); color: white; }
+
+        .btn-reset { background: #ef4444; color: white; margin-top: 20px; font-size: 0.8rem; padding: 10px 20px; }
+        .btn-back { position: absolute; top: 20px; left: 20px; z-index: 100; }
+
+        #result-text {
+            position: absolute;
+            top: 20%;
+            width: 100%;
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 900;
+            text-shadow: 0 0 20px rgba(0,0,0,1);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="selection-screen">
+        <div class="stats-top">
+            <span>Перемоги: <span id="wins">0</span></span>
+            <span>Поразки: <span id="losses">0</span></span>
+        </div>
+        <h1>Обери свого суперника</h1>
+        <div class="character-grid">
+            <div class="char-card" onclick="startGame('Tito.png', 'Тіто')">
+                <img src="Tito.png" alt="Tito">
+                <div>Тіто</div>
+            </div>
+            <div class="char-card" onclick="startGame('Smartik.png', 'Смартик')">
+                <img src="Smartik.png" alt="Smartik">
+                <div>Смартик</div>
+            </div>
+            <div class="char-card" onclick="startGame('Junior.png', 'Джуніор')">
+                <img src="Junior.png" alt="Junior">
+                <div>Джуніор</div>
+            </div>
+            <div class="char-card" onclick="startGame('Fil.png', 'Філ')">
+                <img src="Fil.png" alt="Fil">
+                <div>Філ</div>
+            </div>
+        </div>
+        <button class="btn-reset" onclick="resetRecord()">Скинути рекорд</button>
+    </div>
+
+    <div id="game-screen">
+        <button class="btn-back" onclick="location.reload()">⬅ Назад</button>
+        <img id="opponent-img" class="opponent-full-img" src="" alt="Opponent">
+        
+        <div id="result-text"></div>
+        <div id="opponent-choice-display" class="choice-overlay">✊</div>
+
+        <div class="controls">
+            <button onclick="play('rock')">🪨 Камінь</button>
+            <button onclick="play('paper')">📄 Папір</button>
+            <button onclick="play('scissors')">✂️ Ножиці</button>
+        </div>
+    </div>
+
+    <script>
+        let wins = localStorage.getItem('rps_wins') || 0;
+        let losses = localStorage.getItem('rps_losses') || 0;
+
+        function updateStats() {
+            document.getElementById('wins').innerText = wins;
+            document.getElementById('losses').innerText = losses;
+            localStorage.setItem('rps_wins', wins);
+            localStorage.setItem('rps_losses', losses);
+        }
+
+        updateStats();
+
+        function startGame(imgSrc, name) {
+            document.getElementById('selection-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'block';
+            document.getElementById('opponent-img').src = imgSrc;
+        }
+
+        function play(playerChoice) {
+            const choices = ['rock', 'paper', 'scissors'];
+            const icons = { rock: '✊', paper: '✋', scissors: '✌️' };
+            const botChoice = choices[Math.floor(Math.random() * 3)];
+            
+            const display = document.getElementById('opponent-choice-display');
+            const resultText = document.getElementById('result-text');
+            
+            display.innerText = icons[botChoice];
+            display.classList.add('show');
+
+            let result = "";
+            if (playerChoice === botChoice) {
+                result = "НІЧИЯ!";
+            } else if (
+                (playerChoice === 'rock' && botChoice === 'scissors') ||
+                (playerChoice === 'paper' && botChoice === 'rock') ||
+                (playerChoice === 'scissors' && botChoice === 'paper')
+            ) {
+                result = "ТИ ПЕРЕМІГ!";
+                wins++;
+            } else {
+                result = "ТИ ПРОГРАВ!";
+                losses++;
+            }
+
+            resultText.innerText = result;
+            updateStats();
+
+            // Прибираємо іконку через 1.5 сек
+            setTimeout(() => {
+                display.classList.remove('show');
+                resultText.innerText = "";
+            }, 1500);
+        }
+
+        function resetRecord() {
+            if(confirm("Скинути твої досягнення?")) {
+                wins = 0;
+                losses = 0;
+                updateStats();
+            }
+        }
+    </script>
+</body>
+</html>
