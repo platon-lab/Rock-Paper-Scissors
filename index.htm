@@ -25,22 +25,38 @@
             align-items: center;
         }
 
-        /* Екран вибору */
+        /* Екран вибору (Дозволено скрол для великої кількості героїв) */
         #selection-screen {
             text-align: center;
             z-index: 10;
+            max-height: 100vh;
+            overflow-y: auto;
+            width: 100%;
+            padding: 80px 20px 40px 20px;
+            box-sizing: border-box;
+        }
+
+        /* Налаштування гарного прихованого або тонкого скролбару */
+        #selection-screen::-webkit-scrollbar {
+            width: 8px;
+        }
+        #selection-screen::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
         }
 
         .stats-top {
             position: absolute;
             top: 20px;
             width: 100%;
+            left: 0;
             display: flex;
             justify-content: center;
             gap: 20px;
             font-size: 1.2rem;
             text-transform: uppercase;
             letter-spacing: 2px;
+            z-index: 20;
         }
 
         .character-grid {
@@ -48,6 +64,9 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
             margin-top: 30px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         @media (min-width: 768px) {
@@ -158,6 +177,7 @@
         </div>
         <h1>Обери свого суперника</h1>
         <div class="character-grid">
+            <!-- Старі герої -->
             <div class="char-card" onclick="startGame('Tito.png', 'Тіто')">
                 <img src="Tito.png" alt="Tito">
                 <div>Тіто</div>
@@ -175,12 +195,70 @@
                 <div>Філ</div>
             </div>
             <div class="char-card" onclick="startGame('Milka.png', 'Мілка')">
-                <img src="Milka.png" alt="Fil">
+                <img src="Milka.png" alt="Milka">
                 <div>Мілка</div>
             </div>
             <div class="char-card" onclick="startGame('Bark.png', 'Барк')">
-                <img src="Bark.png" alt="Fil">
+                <img src="Bark.png" alt="Bark">
                 <div>Барк</div>
+            </div>
+
+            <!-- Нові 14 героїв -->
+            <div class="char-card" onclick="startGame('Persik.png', 'Персик')">
+                <img src="Persik.png" alt="Persik">
+                <div>Персик</div>
+            </div>
+            <div class="char-card" onclick="startGame('Spike.png', 'Спайк')">
+                <img src="Spike.png" alt="Spike">
+                <div>Спайк</div>
+            </div>
+            <div class="char-card" onclick="startGame('Alyonka.png', 'Альонка')">
+                <img src="Alyonka.png" alt="Alyonka">
+                <div>Альонка</div>
+            </div>
+            <div class="char-card" onclick="startGame('Lilu.png', 'Лілу')">
+                <img src="Lilu.png" alt="Lilu">
+                <div>Лілу</div>
+            </div>
+            <div class="char-card" onclick="startGame('Manya.png', 'Маня')">
+                <img src="Manya.png" alt="Manya">
+                <div>Маня</div>
+            </div>
+            <div class="char-card" onclick="startGame('Liza.png', 'Ліза')">
+                <img src="Liza.png" alt="Liza">
+                <div>Ліза</div>
+            </div>
+            <div class="char-card" onclick="startGame('Grivna.png', 'Гривня')">
+                <img src="Grivna.png" alt="Grivna">
+                <div>Гривня</div>
+            </div>
+            <div class="char-card" onclick="startGame('Ben.png', 'Бен')">
+                <img src="Ben.png" alt="Ben">
+                <div>Бен</div>
+            </div>
+            <div class="char-card" onclick="startGame('Goldi.png', 'Голді')">
+                <img src="Goldi.png" alt="Goldi">
+                <div>Голді</div>
+            </div>
+            <div class="char-card" onclick="startGame('Raf.png', 'Раф')">
+                <img src="Raf.png" alt="Raf">
+                <div>Раф</div>
+            </div>
+            <div class="char-card" onclick="startGame('Veles.png', 'Велес')">
+                <img src="Veles.png" alt="Veles">
+                <div>Велес</div>
+            </div>
+            <div class="char-card" onclick="startGame('Masha.png', 'Маша')">
+                <img src="Masha.png" alt="Masha">
+                <div>Маша</div>
+            </div>
+            <div class="char-card" onclick="startGame('Brilliantik.png', 'Брілліантік')">
+                <img src="Brilliantik.png" alt="Brilliantik">
+                <div>Брілліантік</div>
+            </div>
+            <div class="char-card" onclick="startGame('Richik.png', 'Річік')">
+                <img src="Richik.png" alt="Richik">
+                <div>Річік</div>
             </div>
         </div>
         <button class="btn-reset" onclick="resetRecord()">Скинути рекорд</button>
